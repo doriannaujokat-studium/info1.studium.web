@@ -62,6 +62,19 @@
             });
             ulElem.click();
         });
+        document.getElementById('turing-example').addEventListener('click', () => {
+            loadSave(JSON.parse("{\"Band\":\"111+111\",\"E\":\"1+\",\"B\":\"1+_=*\",\"Start\":\"z1\",\"Empty\":\"_\",\"T\":\"(z1,_)(z1,_,R)\\n(z1,1)(z2,1,L)\\n\\n(z2,_)(z3,=,R)\\n\\n(z3,_)(z5,_,L)\\n(z3,*)(z3,*,R)\\n(z3,+)(z3,+,R)\\n(z3,=)(z3,=,R)\\n(z3,1)(z4,*,L)\\n\\n(z4,*)(z4,*,L)\\n(z4,+)(z4,+,L)\\n(z4,=)(z4,=,L)\\n(z4,_)(z3,*,R)\\n\\n(z5,_)(z5,_,H)\\n(z5,+)(z5,+,L)\\n(z5,1)(z5,1,L)\\n(z5,=)(z5,=,L)\\n(z5,*)(z5,1,L)\"}"));
+            saveToLocal();
+        });
+        document.getElementById('turing-clear').addEventListener('click', () => {
+            DOM_Band_list.value = "";
+            DOM_E_list.value = "";
+            DOM_B_list.value = "";
+            DOM_StartZ.value = "";
+            DOM_emptyZ.value = "";
+            DOM_T_list.value = "";
+            saveToLocal();
+        });
 
         function createSave() {
             let saveData = {};
@@ -179,15 +192,6 @@
         }
 
         document.getElementById('turing-reset').addEventListener('click', resetTuring);
-        document.getElementById('turing-clear').addEventListener('click', () => {
-            DOM_Band_list.value = "";
-            DOM_E_list.value = "";
-            DOM_B_list.value = "";
-            DOM_StartZ.value = "";
-            DOM_emptyZ.value = "";
-            DOM_T_list.value = "";
-            saveToLocal();
-        });
         document.getElementById('turing-play').addEventListener('click', () => {
             if (simulating) {
                 clearInterval(simulatingTimer);
