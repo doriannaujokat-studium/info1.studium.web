@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Turing-Machine Simulator</title>
+    <link rel="icon" href="https://cdn.studium.doriannaujokat.de/favicon.png">
+    <link rel="stylesheet" href="https://cdn.studium.doriannaujokat.de/main.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="simulator.js"></script>
+    <style>
+
+        #turing-list-Z {
+            flex-wrap: wrap;
+        }
+        #turing-list-Z-empty {
+            margin-top: 5px;
+            font-style: italic;
+            color: var(--color-shade);
+        }
+        #turing-list-Z>div {
+            padding: 2px;
+            background-color: var(--color-main);
+            color: #ffffff;
+            min-width: 20px;
+            border-radius: 7.5px;
+            text-align: center;
+            margin: 2px;
+        }
+        .turing-list-input {
+            margin-left: 2px;
+            outline: none;
+        }
+    </style>
+</head>
+<body>
+<div class="wrapper v">
+    <div class="titlebar">
+        <div class="logo">
+            <img src="https://cdn.studium.doriannaujokat.de/logo.svg">
+        </div>
+        <div class="title"><a href="/index.html">Turing-Machine Simulator</a></div>
+    </div>
+    <div class="wrapper v scroll-v cscroll" style="overflow: hidden">
+        <div class="wrapper h">
+            <button id="turing-save">In Datei speichern</button>
+            <button id="turing-load">Aus Datei laden</button>
+        </div>
+        <canvas id="turing-canvas" height="80" style="height: 80px;"></canvas>
+        <input id="turing-output" disabled>
+        <div class="wrapper h">
+            <button id="turing-reset">Simulation zurücksetzen</button>
+            <button id="turing-step">Schritt</button>
+            <button id="turing-play">Start</button>
+            <button id="turing-clear">Alles löschen</button>
+        </div>
+        <div class="wrapper v scroll-v cscroll">
+            <div class="wrapper v" style="padding: 2px;flex:0;">
+                <div class="wrapper h">
+                    <div style="margin-top: 5px">Band:</div>
+                    <input class="turing-list-input" id="turing-list-Band">
+                </div>
+                <div class="wrapper h">
+                    <div style="margin-top: 5px">Ζ:</div>
+                    <div id="turing-list-Z-empty">empty</div>
+                    <div class="wrapper h" id="turing-list-Z"></div>
+                </div>
+                <div class="wrapper h">
+                    <div style="margin-top: 5px">∑:</div>
+                    <input class="turing-list-input" id="turing-list-E">
+                </div>
+                <div class="wrapper h">
+                    <div style="margin-top: 5px">Γ:</div>
+                    <input class="turing-list-input" id="turing-list-B">
+                </div>
+                <div class="wrapper h">
+                    <div style="margin-top: 5px">Startzustand:</div>
+                    <input class="turing-list-input" id="turing-startZ" value="z1">
+                </div>
+                <div class="wrapper h">
+                    <div style="margin-top: 5px">Leerzeichen:</div>
+                    <input class="turing-list-input" id="turing-emptyZ" value="_">
+                </div>
+            </div>
+            <textarea id="turing-list-transitions" style="resize: vertical;flex:1;"></textarea>
+        </div>
+    </div>
+</div>
+</body>
+</html>
