@@ -63,7 +63,7 @@
             ulElem.click();
         });
         document.getElementById('turing-example').addEventListener('click', () => {
-            loadSave(JSON.parse("{\"Band\":\"111+111\",\"E\":\"1+\",\"B\":\"1+_=*\",\"Start\":\"z1\",\"Empty\":\"_\",\"T\":\"(z1,_)(z1,_,R)\\n(z1,1)(z2,1,L)\\n\\n(z2,_)(z3,=,R)\\n\\n(z3,_)(z5,_,L)\\n(z3,*)(z3,*,R)\\n(z3,+)(z3,+,R)\\n(z3,=)(z3,=,R)\\n(z3,1)(z4,*,L)\\n\\n(z4,*)(z4,*,L)\\n(z4,+)(z4,+,L)\\n(z4,=)(z4,=,L)\\n(z4,_)(z3,*,R)\\n\\n(z5,_)(z5,_,H)\\n(z5,+)(z5,+,L)\\n(z5,1)(z5,1,L)\\n(z5,=)(z5,=,L)\\n(z5,*)(z5,1,L)\"}"));
+            loadSave(JSON.parse("{\"Band\":\"111+11111\",\"E\":\"1+\",\"B\":\"1+_=*\",\"Start\":\"z1\",\"Empty\":\"_\",\"T\":\"(z1,_)(z1,_,R)\\n(z1,1)(z2,1,L)\\n\\n(z2,_)(z3,=,R)\\n\\n(z3,_)(z5,_,L)\\n(z3,*)(z3,*,R)\\n(z3,+)(z3,+,R)\\n(z3,=)(z3,=,R)\\n(z3,1)(z4,*,L)\\n\\n(z4,*)(z4,*,L)\\n(z4,+)(z4,+,L)\\n(z4,=)(z4,=,L)\\n(z4,_)(z3,*,R)\\n\\n(z5,_)(z5,_,H)\\n(z5,+)(z5,+,L)\\n(z5,1)(z5,1,L)\\n(z5,=)(z5,=,L)\\n(z5,*)(z5,1,L)\"}"));
             saveToLocal();
         });
         document.getElementById('turing-clear').addEventListener('click', () => {
@@ -229,13 +229,22 @@
             const middle = [width/2,height/2];
             const middleElem = [middle[0]-rectSize/2,middle[1]-rectSize/2];
 
+            ctx.clearRect(0,0,width,height);
 
             for (let i = BandPos - Math.round(middleElem[0]/50); middleElem[0] - (BandPos-i)*(rectSize+margin) < width + rectSize + margin; i++) {
                 let value = Band.get(i)??emptyChar;
                 drawRect(i,value,middleElem[0] - (BandPos-i)*(rectSize+margin),middleElem[1],rectSize,rectSize);
             }
+
             ctx.strokeStyle = '#ff0000';
             ctx.strokeRect(middleElem[0],middleElem[1],rectSize,rectSize);
+
+            ctx.textAlign = "center";
+            ctx.textBaseline = "bottom";
+            ctx.font = "16px sans-serif";
+            ctx.fillStyle = '#ff0000';
+            //ctx.fillText(v,x+(w/2-measure.width/2),y+(h/2));
+            ctx.fillText(CurrentState,middleElem[0]+(rectSize/2),middleElem[1]-1);
         }
         function drawRect(i,v,x,y,w,h) {
             ctx.fillStyle = Math.abs(i)%2===1?'#000000':'#89ba17';
