@@ -1,0 +1,142 @@
+input, textarea {
+    outline: none;
+    background-color: var(--color-shade);
+    border: none;
+    padding: 3px;
+}
+
+button {
+    display: flex;
+    background-color: var(--color-main);
+    color: var(--color-text);
+    align-items: center;
+}
+
+svg {
+    fill: currentColor;
+    height: 100%;
+}
+
+#turing-list-Z {
+    flex-wrap: wrap;
+}
+#turing-list-Z-empty {
+    margin-top: 5px;
+    font-style: italic;
+    color: var(--color-shade);
+}
+#turing-output {
+    color: var(--color-text);
+    background-color: var(--color-shade);
+    margin-bottom: 5px;
+}
+#turing-list-Z>div {
+    padding: 2px;
+    background-color: var(--color-main);
+    color: #ffffff;
+    min-width: 20px;
+    border-radius: 7.5px;
+    text-align: center;
+    margin: 2px;
+}
+.turing-list-input {
+    margin-left: 2px;
+    outline: none;
+}
+
+.table {
+    display: table;
+}
+.table .row {
+    display: table-row;
+}
+.table .row > * {
+    display: table-cell;
+}
+
+.menubar {
+    display: flex;
+    flex-flow: row;
+    width: 100%;
+    max-height: 30px;
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    background-color: var(--color-main);
+    border-top: 1px solid currentColor;
+    color: white;
+}
+
+.menubar > button {
+    outline: none;
+    background-color: transparent;
+    color: inherit;
+    border: none;
+    padding: 3px;
+    text-overflow: ellipsis;
+    text-wrap: none;
+    flex-wrap: nowrap;
+    height: 100%;
+    transition: background-color 250ms ease-in-out, color 250ms ease-in-out;
+    cursor: pointer;
+}
+.menubar > button+button {
+    border-left: 1px solid currentColor;
+}
+
+.menubar > button:hover {
+    background-color: rgba(0, 0, 0, 0.25);
+}
+
+.menubar > button:disabled {
+    background-color: rgba(0, 0, 0, 0.5);
+    color: gray;
+}
+
+.control {
+    height: 45px;
+    padding: 3px;
+    box-sizing: border-box;
+}
+
+.control > button {
+    outline: none;
+    background-color: transparent;
+    color: inherit;
+    border: 2px solid currentColor;
+    border-radius: 10px;
+    padding: 3px;
+    text-overflow: ellipsis;
+    text-wrap: none;
+    flex-wrap: nowrap;
+    height: 100%;
+    transition: background-color 150ms ease-in-out, color 150ms ease-in-out;
+    cursor: pointer;
+}
+
+.control > button+button {
+    margin-left: 5px;
+}
+
+.control > button[active] {
+    background-color: var(--color-main);
+    color: var(--color-text);
+}
+.control > button:hover {
+    background-color: var(--color-shade);
+}
+
+.control > button:disabled {
+    background-color: rgba(0, 0, 0, 0.5);
+    color: var(--color-shade);
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+    .menubar > button {
+        transition: none;
+    }
+    .control > button {
+        transition: none;
+    }
+}

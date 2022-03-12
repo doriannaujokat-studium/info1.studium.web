@@ -5,32 +5,9 @@
     <title>Turing-Machine Simulator</title>
     <link rel="icon" href="https://cdn.studium.doriannaujokat.de/favicon.png">
     <link rel="stylesheet" href="https://cdn.studium.doriannaujokat.de/main.css">
+    <link rel="stylesheet" href="style.css">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="simulator.js"></script>
-    <style>
-
-        #turing-list-Z {
-            flex-wrap: wrap;
-        }
-        #turing-list-Z-empty {
-            margin-top: 5px;
-            font-style: italic;
-            color: var(--color-shade);
-        }
-        #turing-list-Z>div {
-            padding: 2px;
-            background-color: var(--color-main);
-            color: #ffffff;
-            min-width: 20px;
-            border-radius: 7.5px;
-            text-align: center;
-            margin: 2px;
-        }
-        .turing-list-input {
-            margin-left: 2px;
-            outline: none;
-        }
-    </style>
 </head>
 <body>
 <div class="wrapper v">
@@ -41,32 +18,79 @@
         <div class="title"><a href="/index.html">Turing-Machine Simulator</a></div>
     </div>
     <div class="wrapper v scroll-v cscroll" style="overflow: hidden">
-        <div class="wrapper h">
-            <button id="turing-save">In Datei speichern</button>
-            <button id="turing-load">Aus Datei laden</button>
-            <button id="turing-clear">Alles löschen</button>
-            <button id="turing-example">Beispiel laden</button>
+        <div class="wrapper h menubar" id="menubar">
+            <button id="turing-save">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30">
+                    <path d="M6 4C4.895 4 4 4.895 4 6L4 24C4 25.105 4.895 26 6 26L24 26C25.105 26 26 25.105 26 24L26 8L22 4L20 4L20 10C20 10.552 19.552 11 19 11L10 11C9.448 11 9 10.552 9 10L9 4L6 4 z M 16 4L16 9L18 9L18 4L16 4 z M 10 16L20 16C21.105 16 22 16.895 22 18L22 24L8 24L8 18C8 16.895 8.895 16 10 16 z" />
+                </svg>
+                <div>In Datei speichern</div>
+            </button>
+            <button id="turing-load">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30">
+                    <path d="M8 3C6.895 3 6 3.895 6 5L6 25C6 26.105 6.895 27 8 27L22 27C23.105 27 24 26.105 24 25L24 16L15.414062 16L17.707031 18.292969C18.098031 18.683969 18.098031 19.316031 17.707031 19.707031C17.512031 19.902031 17.256 20 17 20C16.744 20 16.487969 19.902031 16.292969 19.707031L12.292969 15.707031C11.901969 15.316031 11.901969 14.683969 12.292969 14.292969L16.292969 10.292969C16.683969 9.9019687 17.316031 9.9019687 17.707031 10.292969C18.098031 10.683969 18.098031 11.316031 17.707031 11.707031L15.414062 14L24 14L24 9.5C24 9.235 23.895031 8.9799688 23.707031 8.7929688L18.207031 3.2929688C18.019031 3.1049688 17.765 3 17.5 3L8 3 z M 24 14L24 16L28 16C28.552 16 29 15.552 29 15C29 14.448 28.552 14 28 14L24 14 z" />
+                </svg>
+                <div>Aus Datei laden</div>
+            </button>
+            <button id="turing-example">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30">
+                    <path d="M6.5292969 2.515625 A 1 1 0 0 0 5.8085938 2.8085938 A 1 1 0 0 0 5.8085938 4.2226562 A 1 1 0 0 0 7.2226562 4.2226562 A 1 1 0 0 0 7.2226562 2.8085938 A 1 1 0 0 0 6.5292969 2.515625 z M 23.5 2.515625 A 1 1 0 0 0 22.777344 2.8085938 A 1 1 0 0 0 22.777344 4.2226562 A 1 1 0 0 0 24.191406 4.2226562 A 1 1 0 0 0 24.191406 2.8085938 A 1 1 0 0 0 23.5 2.515625 z M 15 3C10.029 3 6 7.029 6 12C6 17 10 19 12 23L18 23C20 19 24 17 24 12C24 7.029 19.971 3 15 3 z M 15 6L15 11L19 11L15 18L15 13L11 13L15 6 z M 3 11 A 1 1 0 0 0 2 12 A 1 1 0 0 0 3 13 A 1 1 0 0 0 4 12 A 1 1 0 0 0 3 11 z M 27 11 A 1 1 0 0 0 26 12 A 1 1 0 0 0 27 13 A 1 1 0 0 0 28 12 A 1 1 0 0 0 27 11 z M 6.5292969 19.484375 A 1 1 0 0 0 5.8066406 19.777344 A 1 1 0 0 0 5.8066406 21.191406 A 1 1 0 0 0 7.2226562 21.191406 A 1 1 0 0 0 7.2226562 19.777344 A 1 1 0 0 0 6.5292969 19.484375 z M 23.498047 19.486328 A 1 1 0 0 0 22.777344 19.777344 A 1 1 0 0 0 22.777344 21.193359 A 1 1 0 0 0 24.191406 21.193359 A 1 1 0 0 0 24.191406 19.777344 A 1 1 0 0 0 23.498047 19.486328 z M 12 25L12 26C12 27.105 12.895 28 14 28 A 1 1 0 0 0 15 29 A 1 1 0 0 0 16 28C17.105 28 18 27.105 18 26L18 25L12 25 z" />
+                </svg>
+                <div>Beispiel laden</div>
+            </button>
+            <button id="turing-clear">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30">
+                    <path d="M24.707,8.793l-6.5-6.5C18.019,2.105,17.765,2,17.5,2H7C5.895,2,5,2.895,5,4v22c0,1.105,0.895,2,2,2h16c1.105,0,2-0.895,2-2 V9.5C25,9.235,24.895,8.981,24.707,8.793z M18,10c-0.552,0-1-0.448-1-1V3.904L23.096,10H18z" />
+                </svg>
+                <div>Neue Datei</div>
+            </button>
         </div>
         <canvas id="turing-canvas" height="80" style="height: 80px;"></canvas>
         <input id="turing-output" disabled>
-        <div class="wrapper h">
-            <button id="turing-reset">Simulation zurücksetzen</button>
-            <button id="turing-play">Start</button>
-            <button id="turing-step">Schritt</button>
+        <div class="wrapper h control">
+            <button id="turing-reset">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30">
+                    <path d="M15 3C8.3845336 3 3 8.3845336 3 15C3 21.615466 8.3845336 27 15 27C21.615466 27 27 21.615466 27 15 A 1.0001 1.0001 0 1 0 25 15C25 20.534534 20.534534 25 15 25C9.4654664 25 5 20.534534 5 15C5 9.4654664 9.4654664 5 15 5C17.511974 5 19.790481 5.9310235 21.544922 7.4550781L19 10L25 10L25 4L22.960938 6.0390625C20.840494 4.1553732 18.053851 3 15 3 z" />
+                </svg>
+                <div>Simulation zurücksetzen</div>
+            </button>
+            <button id="turing-step" disabled>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30">
+                    <path d="M21.990234 7.9902344 A 1.0001 1.0001 0 0 0 21.292969 9.7070312L25.585938 14L14 14 A 1.0001 1.0001 0 1 0 14 16L25.585938 16L21.292969 20.292969 A 1.0001 1.0001 0 1 0 22.707031 21.707031L28.619141 15.794922 A 1.0001 1.0001 0 0 0 28.617188 14.203125L22.707031 8.2929688 A 1.0001 1.0001 0 0 0 21.990234 7.9902344 z M 2 14 A 1 1 0 0 0 1 15 A 1 1 0 0 0 2 16 A 1 1 0 0 0 3 15 A 1 1 0 0 0 2 14 z M 6 14 A 1 1 0 0 0 5 15 A 1 1 0 0 0 6 16 A 1 1 0 0 0 7 15 A 1 1 0 0 0 6 14 z M 10 14 A 1 1 0 0 0 9 15 A 1 1 0 0 0 10 16 A 1 1 0 0 0 11 15 A 1 1 0 0 0 10 14 z" />
+                </svg>
+                <div>Schritt</div>
+            </button>
+            <button id="turing-play" disabled>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30">
+                    <path id="turing-play-icon" d="M6 3 A 1 1 0 0 0 5 4 A 1 1 0 0 0 5 4.0039062L5 15L5 25.996094 A 1 1 0 0 0 5 26 A 1 1 0 0 0 6 27 A 1 1 0 0 0 6.5800781 26.8125L6.5820312 26.814453L26.416016 15.908203 A 1 1 0 0 0 27 15 A 1 1 0 0 0 26.388672 14.078125L6.5820312 3.1855469L6.5800781 3.1855469 A 1 1 0 0 0 6 3 z" />
+                </svg>
+                <div id="turing-play-text">Start</div>
+            </button>
+            <button id="turing-fast" disabled>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30">
+                    <path d="M4 6 A 1 1 0 0 0 3 7 A 1 1 0 0 0 3 7.0039062L3 15L3 22.996094 A 1 1 0 0 0 3 23 A 1 1 0 0 0 4 24 A 1 1 0 0 0 4.5917969 23.804688L4.59375 23.804688 A 1 1 0 0 0 4.6210938 23.783203L15 16.236328L15 22.996094 A 1 1 0 0 0 15 23 A 1 1 0 0 0 16 24 A 1 1 0 0 0 16.591797 23.804688L16.59375 23.804688 A 1 1 0 0 0 16.621094 23.783203L27.541016 15.841797 A 1 1 0 0 0 28 15 A 1 1 0 0 0 27.556641 14.169922L16.59375 6.1953125 A 1 1 0 0 0 16 6 A 1 1 0 0 0 15 7 A 1 1 0 0 0 15 7.0039062L15 13.765625L4.59375 6.1953125 A 1 1 0 0 0 4 6 z" />
+                </svg>
+                <div>10x</div>
+            </button>
+            <button id="turing-fast50" disabled>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30">
+                    <path d="M7 6 A 1 1 0 0 0 6 7 A 1 1 0 0 0 6 7.0039062L6 15L6 22.996094 A 1 1 0 0 0 6 23 A 1 1 0 0 0 7 24 A 1 1 0 0 0 7.5917969 23.804688L7.59375 23.804688 A 1 1 0 0 0 7.6210938 23.783203L18.541016 15.841797 A 1 1 0 0 0 19 15 A 1 1 0 0 0 18.556641 14.169922L7.59375 6.1953125 A 1 1 0 0 0 7 6 z M 22.5 6C21.672 6 21 6.672 21 7.5L21 22.5C21 23.328 21.672 24 22.5 24C23.328 24 24 23.328 24 22.5L24 7.5C24 6.672 23.328 6 22.5 6 z" />
+                </svg>
+                <div>50x</div>
+            </button>
         </div>
         <div class="wrapper v scroll-v cscroll">
             <div class="wrapper v" style="padding: 2px;flex:0;">
                 <div class="wrapper h">
-                    <div style="margin-top: 5px">Band:</div>
+                    <div style="margin-top: 5px">Startband:</div>
                     <input class="turing-list-input" id="turing-list-Band">
                 </div>
-                <div class="wrapper h">
+                <div class="wrapper h" style="display: none;">
                     <div style="margin-top: 5px">Ζustände:</div>
                     <div id="turing-list-Z-empty">empty</div>
                     <div class="wrapper h" id="turing-list-Z"></div>
                 </div>
                 <div class="wrapper h">
-                    <div style="margin-top: 5px">Eingabeband:</div>
+                    <div style="margin-top: 5px">Eingabezeichen:</div>
                     <input class="turing-list-input" id="turing-list-E">
                 </div>
                 <div class="wrapper h">
@@ -82,7 +106,9 @@
                     <input class="turing-list-input" id="turing-emptyZ" value="_">
                 </div>
             </div>
-            <textarea id="turing-list-transitions" style="resize: vertical;flex:1;"></textarea>
+            <div class="wrapper h" style="flex:1;">
+                <textarea id="turing-list-transitions" style="resize: vertical;flex:1;"></textarea>
+            </div>
         </div>
     </div>
 </div>
