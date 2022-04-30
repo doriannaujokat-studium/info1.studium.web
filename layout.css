@@ -1,0 +1,142 @@
+html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+
+}
+
+body {
+    background-color: var(--color-background);
+    color: var(--color-text);
+    font-family: sans-serif;
+}
+
+
+/* <editor-fold desc="Wrapper"> */
+.wrapper {
+    display: flex;
+}
+.wrapper.v {
+    flex-flow: column;
+    height: 100%;
+}
+.wrapper.h {
+    flex-flow: row;
+}
+.wrapper.center-v {
+    flex: 1;
+    align-items: center;
+}
+.wrapper.center-h {
+    place-content: center;
+}
+/* </editor-fold> */
+
+.hidefullscreen:fullscreen {
+    display: none;
+}
+
+/* <editor-fold desc="Titelbar"> */
+.titlebar {
+    width: 100%;
+    padding: 5px;
+    background-color: var(--color-brand);
+    color: #ffffff;
+    height: 54px;
+    font-family: sans-serif;
+    font-size: 28px;
+    line-height: 44px;
+    display: flex;
+    flex-flow: row;
+    user-select: none;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+.titlebar > .logo {
+    height: 44px;
+    width: 44px;
+    padding: 2.5px;
+    box-sizing: border-box;
+}
+.titlebar > .logo > :is(svg, img) {
+    width: 100%;
+    height: 100%;
+    fill: #ffffff;
+}
+.titlebar > .title {
+    margin-left: 5px;
+    flex: 1;
+    display: inline-flex;
+    align-self: center;
+    font-size: calc(16px + 1.5vmin);
+    line-height: calc(16px + 1.5vmin);
+}
+/* </editor-fold> */
+
+/* <editor-fold desc="Menubar"> */
+.menubar {
+    display: flex;
+    width: 100%;
+    max-width: 100%;
+    max-height: 30px;
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    background-color: var(--color-brand);
+    border-top: 1px solid currentColor;
+    color: white;
+}
+.menubar > button {
+    outline: none;
+    background-color: transparent;
+    color: inherit;
+    border: none;
+    padding: 3px;
+    text-overflow: ellipsis;
+    height: 100%;
+    transition: background-color 250ms ease-in-out, color 250ms ease-in-out;
+    cursor: pointer;
+    overflow: hidden;
+}
+.menubar > button+button {
+    border-left: 1px solid currentColor;
+}
+.menubar > button:hover {
+    background-color: rgba(0, 0, 0, 0.25);
+}
+.menubar > button:disabled {
+    background-color: rgba(0, 0, 0, 0.5);
+    color: gray;
+}
+/* </editor-fold> */
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+a.underline {
+    text-decoration: underline;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    * {
+        transition: none;
+    }
+}
+
+@media (max-width: 450px) {
+    .titlebar > .title {
+    }
+}
+
+@media print {
+    body {
+        background-color: transparent;
+        color: black;
+        font-family: sans-serif;
+    }
+    .menubar, .titlebar {
+        display: none;
+    }
+}

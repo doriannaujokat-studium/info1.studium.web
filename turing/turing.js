@@ -62,7 +62,7 @@ function load(args) {
     for (let t of args.Transitions) {
         if (!this.Transitions.has(t.oState)) this.Transitions.set(t.oState, new Map());
         let tm = this.Transitions.get(t.oState);
-        tm.set(t.oChar, {char: t.nChar, state: t.nState, action: t.action});
+        if (!tm.has(t.oChar)) tm.set(t.oChar, {char: t.nChar, state: t.nState, action: t.action});
     }
     args.BandValue.split('').forEach((v,i) => v.length === 1 && this.Band.set(i,v));
     return this;

@@ -6,15 +6,31 @@ input, textarea {
 }
 
 button {
-    display: flex;
-    background-color: var(--color-main);
+    display: inline-flex;
+    background-color: var(--color-brand);
     color: var(--color-text);
     align-items: center;
+    user-select: none;
+}
+.text-wrap {
+    display: block;
+    flex: 1;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.text-wrap > * {
+    display: inline;
+    vertical-align: middle;
+    line-height: 1em;
+    font-size: 1em;
 }
 
 svg {
+    display: inline;
     fill: currentColor;
-    height: 100%;
+    height: 1.5em;
+    max-width: 100%;
 }
 
 #turing-list-Z {
@@ -32,7 +48,7 @@ svg {
 }
 #turing-list-Z>div {
     padding: 2px;
-    background-color: var(--color-main);
+    background-color: var(--color-brand);
     color: #ffffff;
     min-width: 20px;
     border-radius: 7.5px;
@@ -54,49 +70,13 @@ svg {
     display: table-cell;
 }
 
-.menubar {
-    display: flex;
-    flex-flow: row;
-    width: 100%;
-    max-height: 30px;
-    box-sizing: border-box;
-    padding: 0;
-    margin: 0;
-    background-color: var(--color-main);
-    border-top: 1px solid currentColor;
-    color: white;
-}
-
-.menubar > button {
-    outline: none;
-    background-color: transparent;
-    color: inherit;
-    border: none;
-    padding: 3px;
-    text-overflow: ellipsis;
-    text-wrap: none;
-    flex-wrap: nowrap;
-    height: 100%;
-    transition: background-color 250ms ease-in-out, color 250ms ease-in-out;
-    cursor: pointer;
-}
-.menubar > button+button {
-    border-left: 1px solid currentColor;
-}
-
-.menubar > button:hover {
-    background-color: rgba(0, 0, 0, 0.25);
-}
-
-.menubar > button:disabled {
-    background-color: rgba(0, 0, 0, 0.5);
-    color: gray;
-}
-
 .control {
     height: 45px;
     padding: 3px;
     box-sizing: border-box;
+    font-size: 0.9em;
+    max-width: 100%;
+    overflow-x: overlay;
 }
 
 .control > button {
@@ -105,13 +85,15 @@ svg {
     color: inherit;
     border: 2px solid currentColor;
     border-radius: 10px;
-    padding: 3px;
+    padding: 3px 5px 3px 5px;
     text-overflow: ellipsis;
-    text-wrap: none;
     flex-wrap: nowrap;
     height: 100%;
     transition: background-color 150ms ease-in-out, color 150ms ease-in-out;
     cursor: pointer;
+    font-size: 1em;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 .control > button+button {
@@ -119,7 +101,7 @@ svg {
 }
 
 .control > button[active] {
-    background-color: var(--color-main);
+    background-color: var(--color-brand);
     color: var(--color-text);
 }
 .control > button:hover {
@@ -131,12 +113,12 @@ svg {
     color: var(--color-shade);
 }
 
-
-@media (prefers-reduced-motion: reduce) {
-    .menubar > button {
-        transition: none;
-    }
-    .control > button {
-        transition: none;
-    }
+.grid {
+    display: grid;
+    grid-template-areas: "a a";
+    grid-template-columns: min-content;
 }
+.grid-c {
+    display: contents;
+}
+
