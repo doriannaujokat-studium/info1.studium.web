@@ -1,20 +1,29 @@
 (() => {
     const VERSION = 1;
 
+    const LANG = {
+        EMPTCHAR_NOT_BANDCHAR: "Das Leerzeichen ist nicht in der Bandmenge definiert.",
+        INCHAR_NOT_BANDCHAR: "Alle Eingabecharaktere müssen in der Bandmenge definiert sein.",
+        STARTCHAR_NOT_INCHAR: "Der Anfangswert des Bandes kann nur aus Eingabecharakteren bestehen!",
+        STARTSTATE_NOT_DEFINED: "Ein Anfangszustand muss definiert sein!",
+        NEXTSTEP_NA: "Es kann kein weiterer Schritt gemacht werden!",
+        ENDSTATE_ARRIVED: "Das Ende wurde erreicht!",
+        TRANCHAR_NOT_BANDCHAR: "Alle übergangswerte müssen in der Bandmenge definiert sein.",
+        NOT_READY: "Die Maschine ist nicht bereit.",
+    };
+
     window.addEventListener('load', async () => {
-        const TMModule = await import('./turing.js');
-        const TMRModule = await import('./turingRenderer.js');
+        const TMModule = await import('../turing.js');
         const TuringMachine = TMModule.default;
-        const TuringMachineRenderer = TMRModule.default;
 
         let DOM_Z_empty = document.getElementById('turing-list-Z-empty');
         let DOM_Z_list = document.getElementById('turing-list-Z'); // Zustände
-        let DOM_Band_list = document.getElementById('turing-band');
-        let DOM_E_list = document.getElementById('turing-inputC'); // Eingabe
-        let DOM_B_list = document.getElementById('turing-bandC'); // Band
-        let DOM_StartZ = document.getElementById('turing-startS');
-        let DOM_emptyZ = document.getElementById('turing-emptyC');
-        let DOM_T_list = document.getElementById('turing-transitions'); // Übergänge
+        let DOM_Band_list = document.getElementById('turing-list-Band');
+        let DOM_E_list = document.getElementById('turing-list-E'); // Eingabe
+        let DOM_B_list = document.getElementById('turing-list-B'); // Band
+        let DOM_StartZ = document.getElementById('turing-startZ');
+        let DOM_emptyZ = document.getElementById('turing-emptyZ');
+        let DOM_T_list = document.getElementById('turing-list-transitions'); // Übergänge
         let DOM_Expert = document.getElementById('turing-expert'); // Experten Modus
         let output = document.getElementById('turing-output');
         let canvas = document.getElementById('turing-canvas');
@@ -25,42 +34,12 @@
 
         /** @type {TuringMachine} */
         const Machine = new TuringMachine();
-        const Renderer = new TuringMachineRenderer(ctx);
-        Renderer.placeholder = LANG.NOT_READY_PLACEHOLDER;
-        Renderer.setTuringMachine(Machine);
-        canvas.style.cursor = 'grab';
-        canvas.addEventListener('dblclick', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            Renderer.fixedScroll = undefined;
-            Renderer.update();
-        });
-        canvas.addEventListener('mousedown', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            canvas.style.cursor = 'grabbing';
-            /** @param {MouseEvent} e */
-            const move = (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                Renderer.fixedScroll = (Renderer.fixedScroll??0)-e.movementX;
-                Renderer.update();
-            };
-            document.addEventListener('mousemove', move);
-            document.addEventListener('mouseup', () => {
-                document.removeEventListener('mousemove', move);
-                canvas.style.cursor = 'grab';
-            }, {once: true});
-        });
-
-        let machineFullReload = true;
 
         let simulating = false;
         let simulatingTimer = undefined;
 
         let disableAutosave = false;
         let readonly = false;
-        let fileTs = undefined;
 
         {
             const url = new URL(location);
@@ -93,11 +72,12 @@
                 document.getElementById('turing-exportparsed').disabled = true;
                 document.getElementById('turing-sharelink').disabled = true;
 
-                document.getElementById('turing-inputC').setAttribute('readonly','readonly');
-                document.getElementById('turing-bandC').setAttribute('readonly','readonly');
-                document.getElementById('turing-startS').setAttribute('readonly','readonly');
-                document.getElementById('turing-emptyC').setAttribute('readonly','readonly');
-                document.getElementById('turing-transitions').setAttribute('readonly','readonly');
+                //document.getElementById('turing-list-Band').setAttribute('readonly','readonly');
+                document.getElementById('turing-list-E').setAttribute('readonly','readonly');
+                document.getElementById('turing-list-B').setAttribute('readonly','readonly');
+                document.getElementById('turing-startZ').setAttribute('readonly','readonly');
+                document.getElementById('turing-emptyZ').setAttribute('readonly','readonly');
+                document.getElementById('turing-list-transitions').setAttribute('readonly','readonly');
             }
         }
 
@@ -211,7 +191,6 @@
             saveData.Trans = parsedData.Transitions.map(v => `(${v.oState}, ${v.oChar}) ==> (${v.nState/*.replaceAll('\\','\\\\').replaceAll('"','\\""')*/}, ${v.nChar}, ${v.action})`).join('\n');
             saveData.Expert = false;
             saveData.VERSION = VERSION;
-            saveData.TS = fileTs??Date.now();
             let blob = new Blob([JSON.stringify(saveData)],{type: "application/json"});
 
             let dlElem = document.createElement('a');
@@ -266,8 +245,6 @@
             readonly = false;
             document.getElementById('turing-notif-readonly').toggleAttribute('active',false);
             disableAutosave = false;
-            fileTs = undefined;
-            machineFullReload = true;
             document.getElementById('turing-notif-autosave-disabled').toggleAttribute('active',false);
             saveToLocal();
         });
@@ -282,7 +259,6 @@
             saveData.Trans = DOM_T_list.value;
             saveData.Expert = DOM_Expert.hasAttribute('active');
             saveData.VERSION = VERSION;
-            saveData.TS = fileTs??Date.now();
             return saveData;
         }
         function loadSave(data) {
@@ -290,7 +266,6 @@
                 let ignore = confirm(`This save was made using a newer version. (Save: ${data.VERSION??0}, Current: ${VERSION})\n\nIt may not load correctly. Do you want to load it anyway?`);
                 if (!ignore) return;
             }
-            machineFullReload = true;
             DOM_Band_list.value = data.Band ?? "";
             DOM_E_list.value = data.InputC ?? data.E ?? "";
             DOM_B_list.value = data.BandC ?? data.B ?? "";
@@ -298,7 +273,6 @@
             DOM_emptyZ.value = data.Empty ?? "";
             DOM_T_list.value = data.Trans ?? data.T ?? "";
             DOM_Expert.toggleAttribute('active', data.Expert ?? false);
-            fileTs = data.TS ?? Date.now();
             document.getElementById('turing-exportparsed').disabled = !data.Expert;
         }
         function saveToLocal() {
@@ -307,7 +281,6 @@
             window.localStorage.setItem('save',JSON.stringify(data));
         }
         [DOM_Band_list,DOM_E_list,DOM_B_list,DOM_StartZ,DOM_emptyZ,DOM_T_list].forEach(d => d.addEventListener('input',saveToLocal));
-        [DOM_E_list,DOM_B_list,DOM_StartZ,DOM_emptyZ,DOM_T_list].forEach(d => d.addEventListener('input',() => machineFullReload = true));
         function GetParsedTuring() {
             let BandChars = DOM_B_list.value!==""?DOM_B_list.value.split(""):[];
             let EmptyChar = DOM_emptyZ.value!==""?DOM_emptyZ.value:'_';
@@ -752,49 +725,12 @@
             return {BandChars: BandChars, InputChars: InputChars, BandValue: BandValue, EmptyChar: EmptyChar, StartState: DOM_StartZ.value, Transitions: Transitions};
         }
         function resetTuring() {
-            if (Machine.isReady() && !machineFullReload) {
-                output.value = "";
-                Renderer.fixedScroll = undefined;
-                Renderer.scroll = undefined;
-                document.getElementById('turing-play').disabled = true;
-                document.getElementById('turing-step').disabled = true;
-                try {
-                    let BandValue = DOM_Band_list.value!==""?DOM_Band_list.value:"";
-                    Machine.setBand(BandValue);
-                    output.value = Machine.getBandValues();
-                    document.getElementById('turing-play').disabled = false;
-                    document.getElementById('turing-step').disabled = false;
-                } catch (ex) {
-                    Machine.reset();
-                    if (ex.code) {
-                        let message;
-                        switch (validation) {
-                            case "INVALID_INC":
-                                message = LANG.INCHAR_NOT_BANDCHAR;
-                                break;
-                            case "INVALID_EMPTC":
-                                message = LANG.EMPTCHAR_NOT_BANDCHAR;
-                                break;
-                            case "INVALID_TRANS":
-                                message = LANG.TRANCHAR_NOT_BANDCHAR;
-                                break;
-                            default:
-                                message = validation;
-                                break;
-                        }
-                        alert(message);
-                    }
-                } finally {
-                    draw();
-                }
-                return;
-            }
             Machine.reset();
             output.value = "";
+            DOM_Z_list.innerHTML = "";
+            DOM_Z_empty.style.display = "block";
             document.getElementById('turing-play').disabled = true;
             document.getElementById('turing-step').disabled = true;
-            Renderer.fixedScroll = undefined;
-            Renderer.scroll = undefined;
             draw();
 
             let loadParam = GetParsedTuring();
@@ -817,7 +753,6 @@
                         break;
                 }
                 alert(message);
-                machineFullReload = true;
                 return;
             }
             Machine.load(loadParam);
@@ -825,7 +760,6 @@
             document.getElementById('turing-play').disabled = false;
             document.getElementById('turing-step').disabled = false;
             draw();
-            machineFullReload = false;
 
         }
         function timedStep() {
@@ -858,7 +792,6 @@
         document.getElementById('turing-reset').addEventListener('click', resetTuring);
         document.getElementById('turing-expert').addEventListener('click', (e) => {
             if (e.target !== e.currentTarget) return;
-            machineFullReload = true;
             document.getElementById('turing-expert').toggleAttribute('active');
             document.getElementById('turing-exportparsed').disabled = readonly || !document.getElementById('turing-expert').hasAttribute('active');
             saveToLocal();
@@ -869,13 +802,11 @@
                 if (document.getElementById('turing-fast').hasAttribute('active')) {
                     simulatingTimer = setInterval(timedStep, 250);
                     document.getElementById('turing-fast').removeAttribute('active');
-                    Renderer.enableTransitions = true;
                     return;
                 }
                 document.getElementById('turing-fast50').removeAttribute('active');
                 simulatingTimer = setInterval(timedStep, 25);
                 document.getElementById('turing-fast').setAttribute('active','');
-                Renderer.enableTransitions = false;
             }
         });
         document.getElementById('turing-fast50').addEventListener('click', () => {
@@ -884,13 +815,11 @@
                 if (document.getElementById('turing-fast50').hasAttribute('active')) {
                     simulatingTimer = setInterval(timedStep, 250);
                     document.getElementById('turing-fast50').removeAttribute('active');
-                    Renderer.enableTransitions = true;
                     return;
                 }
                 document.getElementById('turing-fast').removeAttribute('active');
                 simulatingTimer = setInterval(timedStep, 5);
                 document.getElementById('turing-fast50').setAttribute('active','');
-                Renderer.enableTransitions = false;
             }
         });
         document.getElementById('turing-play').addEventListener('click', () => {
@@ -912,11 +841,9 @@
                 document.getElementById('turing-play-icon').setAttribute('d',"M6 3 A 1 1 0 0 0 5 4 A 1 1 0 0 0 5 4.0039062L5 15L5 25.996094 A 1 1 0 0 0 5 26 A 1 1 0 0 0 6 27 A 1 1 0 0 0 6.5800781 26.8125L6.5820312 26.814453L26.416016 15.908203 A 1 1 0 0 0 27 15 A 1 1 0 0 0 26.388672 14.078125L6.5820312 3.1855469L6.5800781 3.1855469 A 1 1 0 0 0 6 3 z");
                 simulating = false;
                 simulatingTimer = undefined;
-                Renderer.enableTransitions = true;
                 return;
             }
             simulating = true;
-            Renderer.enableTransitions = true;
             document.getElementById('turing-clear').disabled = readonly || true;
             document.getElementById('turing-example').disabled = readonly || true;
             document.getElementById('turing-example-expert').disabled = readonly || true;
@@ -934,32 +861,46 @@
         document.getElementById('turing-step').addEventListener('click', timedStep);
 
         window.addEventListener('resize', resize);
-        const resizeObserver = new ResizeObserver(resize);
-        resizeObserver.observe(canvas.parentElement);
 
         function resize() {
-            canvas.width = canvas.parentElement.clientWidth;
+            canvas.width = window.innerWidth;
             draw();
         }
         function draw() {
-            Renderer.update();
-            return;
-            const width = canvas.clientWidth, height = canvas.clientHeight;
-            ctx.clearRect(0,0,width,height);
-            if (!Machine.isReady()) return;
-
             const rectSize = 40;
             const margin = 10;
+            const width = canvas.clientWidth, height = canvas.clientHeight;
             const middle = [width/2,height/2];
             const middleElem = [middle[0]-rectSize/2,middle[1]-rectSize/2];
 
+            ctx.clearRect(0,0,width,height);
+            if (!Machine.isReady()) return;
 
-            for (let i = Machine.getCurrentPosition() - Math.ceil(middleElem[0]/50); middleElem[0] - (Machine.getCurrentPosition()-i)*(rectSize+margin) < width + rectSize + margin; i++) {
+            for (let i = Machine.getCurrentPosition() - Math.round(middleElem[0]/50); middleElem[0] - (Machine.getCurrentPosition()-i)*(rectSize+margin) < width + rectSize + margin; i++) {
                 let value = Machine.getCharacterAtPosition(i);
                 drawRect(i,value,middleElem[0] - (Machine.getCurrentPosition()-i)*(rectSize+margin),middleElem[1],rectSize,rectSize);
             }
 
+            ctx.strokeStyle = '#ff0000';
+            ctx.strokeRect(middleElem[0],middleElem[1],rectSize,rectSize);
 
+            ctx.textAlign = "center";
+            ctx.textBaseline = "bottom";
+            ctx.font = "16px sans-serif";
+            ctx.fillStyle = '#ff0000';
+            //ctx.fillText(v,x+(w/2-measure.width/2),y+(h/2));
+            ctx.fillText(Machine.getCurrentState(),middleElem[0]+(rectSize/2),middleElem[1]-1);
+        }
+        function drawRect(i,v,x,y,w,h) {
+            ctx.fillStyle = Math.abs(i)%2===1?'#000000':'#89ba17';
+            ctx.fillRect(x,y,w,h);
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.font = "24px sans-serif";
+            let measure = ctx.measureText(v);
+            ctx.fillStyle = Math.abs(i)%2===1?'#89ba17':'#000000';
+            //ctx.fillText(v,x+(w/2-measure.width/2),y+(h/2));
+            ctx.fillText(v,x+(w/2),y+(h/2));
         }
 
         resize();

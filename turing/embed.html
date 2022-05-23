@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Turing Machine Simulator Embed</title>
+    <link rel="icon" href="https://cdn.studium.doriannaujokat.de/favicon.png">
+    <link rel="stylesheet" href="https://cdn.studium.doriannaujokat.de/color.css">
+    <link rel="stylesheet" href="https://cdn.studium.doriannaujokat.de/layout.css">
+    <link rel="stylesheet" href="layout.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="./lang.js"></script>
+    <script src="embed.js"></script>
+    <meta name="theme-color" content="#89ba17">
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Turing Machine Simulator Embed" />
+    <meta property="og:description" content="Eine eingebettete Version des Turing Machine Simulators." />
+    <meta property="og:url" content="https://info1.studium.doriannaujokat.de/turing/embed" />
+    <meta property="og:image" content="https://cdn.studium.doriannaujokat.de/favicon.png" />
+    <meta property="og:image:width" content="80" />
+    <meta property="og:image:height" content="80" />
+    <meta property="og:image:alt" content="Logo" />
+    <meta property="og:locale" content="de" />
+    <meta property="og:site_name" content="Dorian Naujokat Studium" />
+</head>
+<body>
+<div id="app">
+    <div id="app-content" style="justify-content: center;">
+        <canvas id="turing-canvas" height="80"></canvas>
+        <input id="turing-output" readonly="readonly">
+        <div id="turing-controls" style="justify-content: center;">
+            <button id="turing-reset" title="Simulation zurücksetzen" class="turing-control">
+                <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30">
+                    <path d="M15 3C8.3845336 3 3 8.3845336 3 15C3 21.615466 8.3845336 27 15 27C21.615466 27 27 21.615466 27 15 A 1.0001 1.0001 0 1 0 25 15C25 20.534534 20.534534 25 15 25C9.4654664 25 5 20.534534 5 15C5 9.4654664 9.4654664 5 15 5C17.511974 5 19.790481 5.9310235 21.544922 7.4550781L19 10L25 10L25 4L22.960938 6.0390625C20.840494 4.1553732 18.053851 3 15 3 z"/>
+                </svg>
+                <div class="label">Simulation zurücksetzen</div>
+            </button>
+            <button id="turing-step" title="Schritt" disabled class="turing-control">
+                <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30">
+                    <path d="M21.990234 7.9902344 A 1.0001 1.0001 0 0 0 21.292969 9.7070312L25.585938 14L14 14 A 1.0001 1.0001 0 1 0 14 16L25.585938 16L21.292969 20.292969 A 1.0001 1.0001 0 1 0 22.707031 21.707031L28.619141 15.794922 A 1.0001 1.0001 0 0 0 28.617188 14.203125L22.707031 8.2929688 A 1.0001 1.0001 0 0 0 21.990234 7.9902344 z M 2 14 A 1 1 0 0 0 1 15 A 1 1 0 0 0 2 16 A 1 1 0 0 0 3 15 A 1 1 0 0 0 2 14 z M 6 14 A 1 1 0 0 0 5 15 A 1 1 0 0 0 6 16 A 1 1 0 0 0 7 15 A 1 1 0 0 0 6 14 z M 10 14 A 1 1 0 0 0 9 15 A 1 1 0 0 0 10 16 A 1 1 0 0 0 11 15 A 1 1 0 0 0 10 14 z"/>
+                </svg>
+                <div class="label">Schritt</div>
+            </button>
+            <button id="turing-play" title="Start" disabled class="turing-control">
+                <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30">
+                    <path id="turing-play-icon" d="M6 3 A 1 1 0 0 0 5 4 A 1 1 0 0 0 5 4.0039062L5 15L5 25.996094 A 1 1 0 0 0 5 26 A 1 1 0 0 0 6 27 A 1 1 0 0 0 6.5800781 26.8125L6.5820312 26.814453L26.416016 15.908203 A 1 1 0 0 0 27 15 A 1 1 0 0 0 26.388672 14.078125L6.5820312 3.1855469L6.5800781 3.1855469 A 1 1 0 0 0 6 3 z"/>
+                </svg>
+                <div class="label" id="turing-play-text">Start</div>
+            </button>
+            <button id="turing-fast" title="10x Geschwindigkeit" disabled class="turing-control">
+                <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30">
+                    <path d="M4 6 A 1 1 0 0 0 3 7 A 1 1 0 0 0 3 7.0039062L3 15L3 22.996094 A 1 1 0 0 0 3 23 A 1 1 0 0 0 4 24 A 1 1 0 0 0 4.5917969 23.804688L4.59375 23.804688 A 1 1 0 0 0 4.6210938 23.783203L15 16.236328L15 22.996094 A 1 1 0 0 0 15 23 A 1 1 0 0 0 16 24 A 1 1 0 0 0 16.591797 23.804688L16.59375 23.804688 A 1 1 0 0 0 16.621094 23.783203L27.541016 15.841797 A 1 1 0 0 0 28 15 A 1 1 0 0 0 27.556641 14.169922L16.59375 6.1953125 A 1 1 0 0 0 16 6 A 1 1 0 0 0 15 7 A 1 1 0 0 0 15 7.0039062L15 13.765625L4.59375 6.1953125 A 1 1 0 0 0 4 6 z"/>
+                </svg>
+                <div class="label">10x</div>
+            </button>
+            <button id="turing-fast50" title="50x Geschwindigkeit" disabled class="turing-control">
+                <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30">
+                    <path d="M7 6 A 1 1 0 0 0 6 7 A 1 1 0 0 0 6 7.0039062L6 15L6 22.996094 A 1 1 0 0 0 6 23 A 1 1 0 0 0 7 24 A 1 1 0 0 0 7.5917969 23.804688L7.59375 23.804688 A 1 1 0 0 0 7.6210938 23.783203L18.541016 15.841797 A 1 1 0 0 0 19 15 A 1 1 0 0 0 18.556641 14.169922L7.59375 6.1953125 A 1 1 0 0 0 7 6 z M 22.5 6C21.672 6 21 6.672 21 7.5L21 22.5C21 23.328 21.672 24 22.5 24C23.328 24 24 23.328 24 22.5L24 7.5C24 6.672 23.328 6 22.5 6 z"/>
+                </svg>
+                <div class="label">50x</div>
+            </button>
+            <button id="turing-openineditor" title="Im Editor öffnen" class="turing-control">
+                <svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30">
+                    <path d="M4 4C2.895 4 2 4.895 2 6L2 10L2 26L28 26L28 8L28 6C28 4.895 27.105 4 26 4L4 4 z M 4 10L26 10L26 24L4 24L4 10 z M 16.033203 11.986328 A 1.0001 1.0001 0 0 0 15.029297 12.757812L13.029297 20.757812 A 1.0004596 1.0004596 0 1 0 14.970703 21.242188L16.970703 13.242188 A 1.0001 1.0001 0 0 0 16.033203 11.986328 z M 9.9804688 12.988281 A 1.0001 1.0001 0 0 0 9.1679688 13.445312L6.7988281 17L9.1679688 20.554688 A 1.0001 1.0001 0 1 0 10.832031 19.445312L9.2011719 17L10.832031 14.554688 A 1.0001 1.0001 0 0 0 9.9804688 12.988281 z M 19.988281 12.988281 A 1.0001 1.0001 0 0 0 19.167969 14.554688L20.798828 17L19.167969 19.445312 A 1.0001 1.0001 0 1 0 20.832031 20.554688L23.201172 17L20.832031 13.445312 A 1.0001 1.0001 0 0 0 19.988281 12.988281 z" />
+                </svg>
+                <div class="label">Im Editor öffnen</div>
+            </button>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -12,13 +12,14 @@ function TuringMachine() {
  * @this {TuringMachine}
  * @return {TuringMachine}
  */
-function reset() {
+TuringMachine.prototype.reset = function reset() {
     /**
      * @name TuringMachine#Band
      * @type {?Map<number,string>}
      * @private
      */
     this.Band = undefined;
+    this.StartBand = undefined;
     /**
      * @name TuringMachine#Position
      * @type {?number}
@@ -31,6 +32,7 @@ function reset() {
      * @private
      */
     this.State = undefined;
+    this.StartState = undefined;
     /**
      * @name TuringMachine#Transitions
      * @type {?Map<string,Map<string,{char: string, state: string, action: "R"|"L"|"H"}>>}
@@ -43,9 +45,16 @@ function reset() {
      * @private
      */
     this.EmptyChar = undefined;
+    this.BandChars = undefined;
+    this.InputChars = undefined;
+    /**
+     * @name TuringMachine#History
+     * @type {?{}[]}
+     * @private
+     */
+    this.History = undefined;
     return this;
 }
-TuringMachine.prototype.reset = reset;
 
 /**
  * @param {{BandChars: string[], InputChars: string[], BandValue: string, EmptyChar: string, StartState: string, Transitions: {oState: string, oChar: string, nState: string, nChar: string, action: "R"|"L"|"H"}[]}} args
@@ -55,19 +64,35 @@ TuringMachine.prototype.reset = reset;
 function load(args) {
     if (validate(args) !== "VALID") return undefined;
     this.Band = new Map();
+    this.StartBand = args.BandValue;
     this.Position = 0;
     this.State = args.StartState;
+    this.StartState = args.StartState;
     this.Transitions = new Map();
     this.EmptyChar = args.EmptyChar;
+    this.BandChars = args.BandChars;
+    this.InputChars = args.InputChars;
     for (let t of args.Transitions) {
         if (!this.Transitions.has(t.oState)) this.Transitions.set(t.oState, new Map());
         let tm = this.Transitions.get(t.oState);
         if (!tm.has(t.oChar)) tm.set(t.oChar, {char: t.nChar, state: t.nState, action: t.action});
     }
     args.BandValue.split('').forEach((v,i) => v.length === 1 && this.Band.set(i,v));
+    this.History = [];
     return this;
 }
 TuringMachine.prototype.load = load;
+
+TuringMachine.prototype.setBand = function setBand(band) {
+    if (!this.isReady()) throw new TuringMachineError('NOT_READY', '');
+    if (!band.split('').every(v => v.length === 0 || this.InputChars.includes(v) || this.EmptyChar === v)) throw new TuringMachineError("INVALID_BANDV");
+    this.Position = 0;
+    this.State = this.StartState;
+    this.Band = new Map();
+    this.StartBand = band;
+    band.split('').forEach((v,i) => v.length === 1 && this.Band.set(i,v));
+    return this;
+};
 
 /**
  * @param {{BandChars: string[], InputChars: string[], BandValue: string, EmptyChar: string, StartState: string, Transitions: {oState: string, oChar: string, nState: string, nChar: string, action: "R"|"L"|"H"}[]}} args
@@ -151,4 +176,12 @@ function isReady() {
 }
 TuringMachine.prototype.isReady = isReady;
 
-export { TuringMachine as default };
+class TuringMachineError extends Error {
+    constructor(code,message) {
+        super(message??code);
+        this.name = "TuringMachineError";
+        this.code = code;
+    }
+}
+
+export { TuringMachine as default, TuringMachineError };

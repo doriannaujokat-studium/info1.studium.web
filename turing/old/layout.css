@@ -52,14 +52,26 @@ body {
     user-select: none;
     box-sizing: border-box;
     overflow: hidden;
+    align-items: center;
 }
-.titlebar > .logo {
-    height: 44px;
-    width: 44px;
-    padding: 2.5px;
+.titlebar > * {
+    height: 100%;
     box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    line-height: 1em;
 }
-.titlebar > .logo > :is(svg, img) {
+.logo {
+    font-size: 1.5em;
+    aspect-ratio: 1 / 1;
+    padding: 2px;
+    justify-content: center;
+}
+.logo > * {
+    display: inline;
+    height: 1em;
+}
+.logo :is(svg, img) {
     width: 100%;
     height: 100%;
     fill: #ffffff;
@@ -67,10 +79,9 @@ body {
 .titlebar > .title {
     margin-left: 5px;
     flex: 1;
-    display: inline-flex;
-    align-self: center;
-    font-size: calc(16px + 1.5vmin);
-    line-height: calc(16px + 1.5vmin);
+    overflow-x: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 /* </editor-fold> */
 
@@ -86,8 +97,9 @@ body {
     background-color: var(--color-brand);
     border-top: 1px solid currentColor;
     color: white;
+    font-size: 13.3333px;
 }
-.menubar > button {
+.menubar > :is(button, div) {
     outline: none;
     background-color: transparent;
     color: inherit;
@@ -95,9 +107,11 @@ body {
     padding: 3px;
     text-overflow: ellipsis;
     height: 100%;
-    transition: background-color 250ms ease-in-out, color 250ms ease-in-out;
+    transition: background-color 250ms ease-in-out, color 250ms ease-in-out, max-width 250ms ease-in-out, padding 250ms ease-in-out;
     cursor: pointer;
     overflow: hidden;
+    font-size: 1em;
+    max-width: 100%;
 }
 .menubar > button+button {
     border-left: 1px solid currentColor;
@@ -126,7 +140,11 @@ a.underline {
 }
 
 @media (max-width: 450px) {
-    .titlebar > .title {
+    .titlebar .title {
+        visibility: hidden;
+    }
+    .menubar > button > div > :not(svg) {
+        display: none;
     }
 }
 

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Turing Simulator</title>
+    <link rel="icon" href="https://cdn.studium.doriannaujokat.de/favicon.png">
+    <link rel="stylesheet" href="https://cdn.studium.doriannaujokat.de/color.css">
+    <link rel="stylesheet" href="old/style.css">
+    <link rel="stylesheet" href="old/layout.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        #submitters {
+            display: grid;
+            width: 100%;
+            grid-template-columns: auto min-content;
+        }
+        #submitters > * {
+            display: contents;
+        }
+        .new-submitter > *, .submitter > * {
+            display: inline;
+            height: 1.5em;
+            padding: 0.25em;
+            box-sizing: border-box;
+        }
+        .submitter button {
+            aspect-ratio: 1 / 1;
+            background-color: red;
+            border: none;
+            outline: none;
+        }
+        .submitter input {
+            width: 100%;
+        }
+        #turing-transitions {
+            display: inline-table;
+            border-collapse: collapse;
+            text-align: center;
+        }
+        #turing-transitions > * {
+            display: table-row;
+        }
+        #turing-transitions > *:nth-child(even) {
+            background-color: rgba(255, 255, 255, 0.25);
+        }
+        #turing-transitions > * > * {
+            display: table-cell;
+            border: 1px solid currentColor;
+            padding: 2px;
+            min-width: 2em;
+        }
+        body {
+            word-break: break-word;
+        }
+
+        @media print {
+            .submitter button {
+                visibility: hidden;
+            }
+            .submitter input {
+                background-color: inherit;
+                color: inherit;
+                font-size: 1.5em;
+                padding: 0.1em 0 0.1em 0;
+            }
+            #submitters-new {
+                display: none;
+            }
+            .table-wrapper {
+                display: flex;
+                justify-content: center;
+            }
+        }
+    </style>
+    <script>
+        window.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('submitters').addEventListener('click', function(e) {
+                if (e.target.parentElement?.id === 'submitters-new') {
+                    e.preventDefault();
+                    const inp = document.createElement('input');
+                    inp.type = 'text';
+                    inp.placeholder = 'Name (Matrikelnummer)';
+                    const rem = document.createElement('button');
+                    rem.innerText = 'X';
+                    rem.tabIndex = -1;
+                    const par = document.createElement('div');
+                    par.classList.add('submitter');
+                    par.append(inp, rem);
+                    document.getElementById('submitters').append(par,e.target.parentElement);
+                    inp.focus();
+                    return;
+                }
+                if (e.target.tagName === 'BUTTON' && e.target.parentElement.classList.contains('submitter')) {
+                    e.target.parentElement.remove();
+                    return;
+                }
+            });
+            document.getElementById('submitters').addEventListener('change', function(e) {
+
+            });
+            document.getElementById('submitters').addEventListener('focusout', function(e) {
+                if (e.target.parentElement.classList.contains('submitter') && e.target.tagName === 'INPUT' && e.target.value === '') {
+                    e.preventDefault();
+                    e.target.parentElement.remove();
+                    return;
+                }
+            });
+            document.getElementById('submitters').addEventListener('focusin', function(e) {
+                if (e.target.parentElement?.id === 'submitters-new') {
+                    e.preventDefault();
+                    const inp = document.createElement('input');
+                    inp.type = 'text';
+                    inp.placeholder = 'Name';
+                    const rem = document.createElement('button');
+                    rem.innerText = 'X';
+                    rem.tabIndex = -1;
+                    const par = document.createElement('div');
+                    par.classList.add('submitter');
+                    par.append(inp, rem);
+                    document.getElementById('submitters').append(par,e.target.parentElement);
+                    inp.focus();
+                    return;
+                }
+            });
+        }, {once: true});
+    </script>
+</head>
+<body>
+<div>
+    <div id="submitters">
+        <div id="submitters-new" class="new-submitter">
+            <input type="text" placeholder="Name (Matrikelnummer)" readonly="readonly">
+        </div>
+    </div>
+    <div>
+        <span>𝒯 = (𝑍, 𝛴, 𝛤, 𝛿,</span>
+        <span id="turing-sstate"></span>
+        <span>,</span>
+        <span id="turing-emptchar"></span>
+        <span>)</span>
+    </div>
+    <div>
+        <span>𝑍 = {</span>
+        <span id="turing-states">
+
+        </span>
+        <span>}</span>
+    </div>
+    <div>
+        <span>𝛴 = {</span>
+        <span id="turing-input">
+
+        </span>
+        <span>}</span>
+    </div>
+    <div>
+        <span>𝛤 = {</span>
+        <span id="turing-band">
+
+        </span>
+        <span>}</span>
+    </div>
+    <span>𝛿 = </span>
+    <div id="turing-transitions"></div>
+</div>
+</body>
+</html>

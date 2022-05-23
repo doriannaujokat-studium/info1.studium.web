@@ -13,7 +13,7 @@ button {
     user-select: none;
 }
 .text-wrap {
-    display: block;
+    display: inline-block;
     flex: 1;
     overflow: hidden;
     white-space: nowrap;
@@ -25,12 +25,26 @@ button {
     line-height: 1em;
     font-size: 1em;
 }
+.icon-text-wrap {
+    display: inline-flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: flex-start;
+    align-content: center;
+    white-space: nowrap;
+    overflow: hidden;
+    flex: 1;
+    max-width: 100%;
+}
 
 svg {
-    display: inline;
+    display: inline-block;
     fill: currentColor;
     height: 1.5em;
     max-width: 100%;
+    aspect-ratio: 1 / 1;
+    overflow: visible;
 }
 
 #turing-list-Z {
@@ -112,6 +126,10 @@ svg {
     background-color: rgba(0, 0, 0, 0.5);
     color: var(--color-shade);
 }
+.control > button:disabled[active] {
+    background-color: #202d0a;
+    color: var(--color-shade);
+}
 
 .grid {
     display: grid;
@@ -122,3 +140,63 @@ svg {
     display: contents;
 }
 
+.turing-version {
+    background-color: rgba(0,0,0,0.2);
+    height: 1em!important;
+    font-size: 0.75em;
+    padding: 5px;
+    border-radius: 1em;
+    transition: background-color 150ms ease-in-out;
+    cursor: pointer;
+}
+.turing-version:hover {
+    background-color: rgba(0,0,0,0.5);
+}
+
+.turing-notif {
+    display: inline-flex;
+    align-items: center;
+    user-select: none;
+    transition: min-width 150ms ease-in-out, max-width 150ms ease-in-out, width 150ms ease-in-out, padding 150ms ease-in-out;
+    background-color: #db4325;
+    box-sizing: border-box;
+    max-width: 100%;
+    font-size: inherit;
+    cursor: default;
+}
+.turing-notif > * {
+
+}
+.turing-notif-text {
+    max-width: 100%;
+    transition: max-width 250ms ease-in-out, padding 250ms ease-in-out;
+    flex: 1;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: inline;
+}
+.turing-notif-text > * {
+    display: inline;
+}
+.turing-notif:not([active]) {
+    padding: 0;
+    max-width: 0px;
+}
+.turing-notif[minimized] .turing-notif-text {
+    max-width: 0px;
+    padding: 0;
+    display: none;
+}
+
+@media (max-width: 450px) {
+    .control button > div > :not(svg) {
+        display: none;
+    }
+}
+@media (max-width: 450px) {
+    .turing-notif-text {
+        max-width: 0px;
+        padding: 0;
+        display: none;
+    }
+}
